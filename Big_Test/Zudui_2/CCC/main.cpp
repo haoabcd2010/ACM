@@ -3,24 +3,30 @@
 #include <algorithm>
 #include <memory.h>
 using namespace std;
+#define MX 40005
 
-const int maxn=40005;
-int res[maxn], ans, t, n, m;
+int n,m;
+int num[MX];
 
 int main()
 {
-    scanf("%d", &t);
-    while(t--){
+    int T;
+    scanf("%d", &T);
+    while(T--)
+    {
         scanf("%d%d", &n, &m);
-        for(int i=0;i<n;i++){
-            scanf("%d", &res[i]);
+        int all = 0;
+        int mm = 0;
+        for(int i=0;i<n;i++)
+        {
+            scanf("%d",&num[i]);
+            all+=num[i];
+            mm = max(mm,num[i]);
         }
-        sort(res,res+n);
-        ans=0;
-        for(int i=n-1-m;i>=0;i--){
-            ans+=res[i]-res[i-1];
-
-        }
+        int ans;
+        ans = all/m;
+        if (all%m) ans++;
+        printf("%d\n",max(ans,mm));
     }
     return 0;
 }
