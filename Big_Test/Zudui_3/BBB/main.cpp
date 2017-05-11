@@ -19,17 +19,8 @@ using namespace std;
 #define eps 1e-9            // 精度
 #define MX  1000005         // 数据范围
 
-int read() {    //输入外挂
-    int res = 0, flag = 0;
-    char ch;
-    if((ch = getchar()) == '-') flag = 1;
-    else if(ch >= '0' && ch <= '9') res = ch - '0';
-    while((ch = getchar()) >= '0' && ch <= '9') res = res * 10 + (ch - '0');
-    return flag ? -res : res;
-}
-// code... ...
 
 int main()
 {
-    return 0;
+
 }
