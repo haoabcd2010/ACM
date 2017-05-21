@@ -1,28 +1,39 @@
 #include <iostream>
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#define LL long long
+#define INF 1000000000000000000
+#define MX 1000005
 using namespace std;
-#define MAXN 105
 
-int C (int n,int m)
-{
-    int res = 1;
-    for (int i=2;i<=n;i++) res*=i;
-
-}
+LL a[MX];
+LL L[MX];
+LL R[MX];
 
 int main()
 {
-    while (scanf("%d",&n)!=EOF)
+    LL n,x;
+    int T;
+    cin>>T;
+    while (T--)
     {
-        for (int i =0;i<n;i++)
-            scanf("%d",&x[i]);
-        Init();
-        int ans =0;
-        for (int i=0;i<n;i++)
-            if (L[i]+R[i]>ans)
-                ans =L[i]+R[i];
-        printf("%d\n",n-(ans-1));
+        cin>>n>>x;
+        for (int i=1;i<=n;i++)
+            cin>>a[i];
+        L[0]=R[n+1]=0;
+        for (int i=1;i<=n;i++)
+            L[i]=max(L[i-1]+a[i],a[i]);
+        for (int i=n;i>=1;i--)
+            R[i]=max(R[i+1]+a[i],a[i]);
+        LL ans = -INF;
+        for (int i=1;i<=n;i++)
+        {
+            if (i>1)
+                ans=max(L[i-1],ans);
+            if (i<n)
+                ans=max(R[i+1],ans);
+            ans=max(L[i]+R[i]-2*a[i]+x,ans);
+        }
+        cout<<ans<<endl;
     }
     return 0;
 }

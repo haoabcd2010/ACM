@@ -1,108 +1,30 @@
 #include <iostream>
-#include <stdio.h>
-#include <string.h>
+#include <queue>
 using namespace std;
 
-char mp[4][4];
-int vis[4][4];
-int n;
-int ans;
-
-void fang(int x,int y)
+struct Node
 {
-    vis[x][y]=1;
-    int i;
-    i=x;
-    while (i+1<n&&mp[i+1][y]=='.')
-    {
-        i++;
-        vis[i][y]++;
+    int x;
+    bool operator <(const Node& b)const{
+        return x<b.x;
     }
-    i=x;
-    while (i-1>=0&&mp[i-1][y]=='.')
-    {
-        i--;
-        vis[i][y]++;
+    bool operator >(const Node& b)const{
+        return x>b.x;
     }
-    i=y;
-    while (i+1<n&&mp[x][i+1]=='.')
-    {
-        i++;
-        vis[x][i]++;
-    }
-    i=y;
-    while (i-1>=0&&mp[x][i-1]=='.')
-    {
-        i--;
-        vis[x][i]++;
-    }
-}
-
-void che(int x,int y)
-{
-    vis[x][y]=0;
-    int i;
-    i=x;
-    while (i+1<n&&mp[i+1][y]=='.')
-    {
-        i++;
-        vis[i][y]--;
-    }
-    i=x;
-    while (i-1>=0&&mp[i-1][y]=='.')
-    {
-        i--;
-        vis[i][y]--;
-    }
-    i=y;
-    while (i+1<n&&mp[x][i+1]=='.')
-    {
-        i++;
-        vis[x][i]--;
-    }
-    i=y;
-    while (i-1>=0&&mp[x][i-1]=='.')
-    {
-        i--;
-        vis[x][i]--;
-    }
-}
-
-int dfs(int l,int cnt)//去l行放置
-{
-    if (cnt>ans) ans=cnt;
-    if (l>n) return 0;
-
-    int i;
-    for (i=0;i<n;i++)
-    {
-        if (mp[l][i]=='.'&&vis[l][i]==0)
-        {
-            fang (l,i);
-            dfs(l,cnt+1);//继续在这行放置
-            che(l,i);
-        }
-    }
-    dfs(l+1,cnt);
-
-}
+};
 
 int main()
 {
-    while (cin>>n)
+    // 其余的也就这么改就行了
+    priority_queue<Node> Q1; // 结构体默认排序,权大先的出队
+    priority_queue<Node ,vector<Node> ,greater<Node> > Q2; // 再定义出队顺序，权小的先出队
+
+    for (int i=1;i<=10;i++)
+    Q2.push((Node){i});
+    while (!Q2.empty())
     {
-        getchar();
-        int i,j;
-        for (i=0;i<n;i++)
-        {
-            for (j=0;j<n;j++)
-                cin>>mp[i][j];
-            getchar();
-        }
-        ans=0;
-        memset(vis,0,sizeof(vis));
-        dfs(0,0);
-        cout<<ans<<endl;
+        int x = Q2.top().x; Q2.pop(); // Q.size() 队列长度
+        cout <<x<<' ';
     }
     return 0;
 }

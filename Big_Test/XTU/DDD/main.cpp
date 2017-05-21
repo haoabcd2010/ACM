@@ -21,18 +21,10 @@ int main()
                 num[i][j]=str[j-1]-'0';
         }
         for (int i=1;i<=n;i++)
-        {
             for (int j=1;j<=m;j++)
-            {
                 for (int x=1;x<=a;x++)
-                {
                     for (int y=1;y<=b;y++)
-                    {
                         ans[(i-1)*a+x][(j-1)*b+y]=num[i][j];
-                    }
-                }
-            }
-        }
         for (int i=1;i<=n*a;i++)
         {
             for (int j=1;j<=m*b;j++)
