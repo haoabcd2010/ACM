@@ -1,39 +1,68 @@
-#include <iostream>
-#include <cstdio>
-#define LL long long
-#define INF 1000000000000000000
-#define MX 1000005
-using namespace std;
+#include "cstdio"
+#include "cstring"
+#include "algorithm"
 
-LL a[MX];
-LL L[MX];
-LL R[MX];
-
+struct city
+{
+    int d;
+    int v;
+};
+city C[1004];
+int mm[1004];
+bool cmp(const city& x,const city& y)
+{
+    if(x.d==y.d)return x.v<y.v;
+    return x.d<y.d;
+}
 int main()
 {
-    LL n,x;
-    int T;
-    cin>>T;
-    while (T--)
+    int n,h;
+    while (scanf ("%d%d",&n,&h) != EOF)
     {
-        cin>>n>>x;
-        for (int i=1;i<=n;i++)
-            cin>>a[i];
-        L[0]=R[n+1]=0;
-        for (int i=1;i<=n;i++)
-            L[i]=max(L[i-1]+a[i],a[i]);
-        for (int i=n;i>=1;i--)
-            R[i]=max(R[i+1]+a[i],a[i]);
-        LL ans = -INF;
-        for (int i=1;i<=n;i++)
+        for (int i=0;i<n;i++)
         {
-            if (i>1)
-                ans=max(L[i-1],ans);
-            if (i<n)
-                ans=max(R[i+1],ans);
-            ans=max(L[i]+R[i]-2*a[i]+x,ans);
+            scanf ("%d%d",&C[i].d,&C[i].v);
         }
-        cout<<ans<<endl;
+        memset(mm,0,sizeof(mm));
+        int sum=0,ma,in,k=0;
+        std::sort(C,C+n,cmp);
+        for (int i=0;i<n;i++)
+        {
+            in=-1;
+            ma=0;
+            for (int j=0;j<n;j++)
+            {
+                if (C[j].d + i + 1 <= h)
+                {
+                    if (ma <= C[j].v)
+                    {
+                         in = j;
+                         ma = C[j].v;
+                    }
+                }
+            }
+            sum += ma;
+            if (in != -1) {C[in].d = h;  mm[i]=ma;}
+        }
+
+        int u=0;
+        for (int i=0;i<n;i++)
+        {
+            ma = 0;
+            u += mm[i];
+            for (int j=0;j<n;j++)
+            {
+                if (C[j].d + i + 1<= h)
+                {
+                    ma = std::max(ma,C[j].v);
+                }
+            }
+            if (u + ma > sum)
+            {
+                sum = u + ma;
+            }
+        }
+        printf("%d\n",sum);
     }
     return 0;
 }
