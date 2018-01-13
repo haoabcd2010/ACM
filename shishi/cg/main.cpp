@@ -21,8 +21,8 @@ using namespace std;
 # define eps         1e-8
 # define MOD         1000000007
 
-inline int scan() {
-    int x=0,f=1; char ch=getchar();
+inline LL scan() {
+    LL x=0,f=1; char ch=getchar();
     while(ch<'0'||ch>'9'){if(ch=='-') f=-1; ch=getchar();}
     while(ch>='0'&&ch<='9'){x=x*10+ch-'0'; ch=getchar();}
     return x*f;
@@ -35,53 +35,37 @@ inline void Out(int a) {
 # define MX 100005
 /**************************/
 
-int n;
-LL ans;
-int num[MX];
-int AND[MX];
-int OR[MX];
-int tot[MX];
-
-void dfs(int l,int r)
-{
-    if (l==r)
-    {
-        ans = (ans+(LL)num[l]*num[r]%MOD)%MOD;
-        return;
-    }
-    int mid = (l+r+1)>>1;
-    int pos = mid;
-    tot[pos]=0; AND[pos]=OR[pos]=num[pos];
-    for (int i=mid;i<=r;i++)
-    {
-        if ( (num[i]&AND[pos]) != AND[pos] || (num[i]|OR[pos]) != OR[pos] )
-        {
-            pos++;
-            AND[pos] = (num[i]&AND[pos-1]);
-            OR[pos] = (num[i]|OR[pos-1]);
-            tot[pos]=1;
-        }
-        else tot[pos]++;
-    }
-    int tpA = num[mid-1];
-    int tpO = num[mid-1];
-    for (int i=mid-1;i>=l;i--)
-    {
-        tpA&=num[i], tpO|=num[i];
-        for (int j=mid;j<=pos;j++)
-            ans = (ans + ((tpA&AND[j])*(tpO|OR[j])%MOD) *tot[j]%MOD)%MOD;
-    }
-    dfs(mid,r);
-    dfs(l,mid-1);
-}
+int n,p;
+LL sum[3][MX];
 
 int main()
 {
-    scanf("%d",&n);
+    n=scan(); p=scan();
+    for (int i=0;i<3;i++)
+    {
+        for (int j=1;j<=n;j++)
+        {
+            sum[i][j]=scan();
+            sum[i][j]=(sum[i][j]+sum[i][j-1])%p;
+        }
+    }
+    int ans = (sum[0][1]+sum[1][1]+sum[1][n])%p;
+    set<int> s;
     for (int i=1;i<=n;i++)
-        num[i]=scan();
-    ans = 0;
-    dfs(1,n);
-    printf("%I64d\n",ans);
+    {
+        int tp = (sum[0][i]-sum[1][i-1]+p)%p;
+        s.insert( tp );
+        int dat = (sum[1][i]+sum[2][n]-sum[2][i-1]+p)%p;
+        set<int>::iterator it = s.lower_bound(p-dat);
+        if (it!=s.end())
+        {
+            if (it!=s.begin())
+            {
+                it--;
+                ans = max((LL)ans,(*it+sum[1][i]+sum[2][n]-sum[2][i-1]+p)%p);
+            }
+        }
+    }
+    printf("%d\n",ans);
     return 0;
 }
